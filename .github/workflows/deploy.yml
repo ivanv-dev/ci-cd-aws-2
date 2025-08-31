@@ -28,8 +28,15 @@ jobs:
       - name: Install CDK dependencies
         working-directory: ./
         run: npm ci
-        if: steps.cache.outputs.cache-hit != 'true'
-
+        if: steps.cache.outputs.cache-hit != 'true'      
+      - name: Debug Secrets
+        run: |
+          echo "Checking if secrets are available..."
+          if [ -z "$" ]; then
+            echo "❌ AWS_ACCESS_KEY_ID is empty"
+          else
+            echo "✅ AWS_ACCESS_KEY_ID is set (length: ${#AWS_ACCESS_KEY_ID})"
+          fi
       - name: Deploy CDK stack
         working-directory: ./
         run: npx cdk deploy --require-approval never
